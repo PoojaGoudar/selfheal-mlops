@@ -25,7 +25,6 @@ Restart the computer. Open **Docker Desktop** from the Start menu, accept the te
 **Check:** `python --version`, `git --version`, `docker --version`, `minikube version`, `kubectl version --client` all print versions.
 
 ## Part 1: Open the project and install
-Extract `selfheal-mlops.zip` to `C:\Projects\selfheal-mlops`. In VS Code: File > Open Folder, then Terminal > New Terminal.
 ```powershell
 python -m venv .venv
 Set-ExecutionPolicy -Scope Process Bypass
