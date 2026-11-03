@@ -1,0 +1,24 @@
+stages:
+  ingest:
+    cmd: python -m selfheal.ingest --out data/raw/air.csv
+    deps:
+      - selfheal/ingest.py
+      - selfheal/data
+    params:
+      - ingest
+    outs:
+      - data/raw/air.csv
+  validate:
+    cmd: python -m selfheal.data.validate data/raw/air.csv
+    deps:
+      - data/raw/air.csv
+      - selfheal/data/validate.py
+  train:
+    cmd: python -m selfheal.train --data data/raw/air.csv --no-register --metrics-out models/metrics.json
+    deps:
+      - data/raw/air.csv
+      - selfheal/train.py
+      - selfheal/features.py
+    metrics:
+      - models/metrics.json:
+          cache: false

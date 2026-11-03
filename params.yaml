@@ -1,0 +1,7 @@
+ingest:
+  source: synthetic     # synthetic | live   (live = Open-Meteo, needs internet)
+  days: 120
+  start: "2026-01-01"
+  seed: 42
+  lat: 12.9716          # Bengaluru
+  lon: 77.5946

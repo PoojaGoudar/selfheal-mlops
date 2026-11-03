@@ -1,0 +1,20 @@
+# Creates the data and the first champion model. Run once: kubectl -n selfheal wait --for=condition=complete job/bootstrap
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bootstrap
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: bootstrap
+          image: selfheal-mlops:latest
+          imagePullPolicy: Never
+          command: ["python", "-m", "selfheal.bootstrap"]
+          envFrom: [{configMapRef: {name: selfheal-config}}]
+          volumeMounts: [{name: data, mountPath: /data}]
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: selfheal-data}

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "selfheal-mlops"
+version = "1.0.0"
+description = "Self-healing ML platform: drift detection, LLM incident copilot, auto-retrain, shadow/canary, human-approved promotion"
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+include = ["selfheal*"]
+
+[tool.pytest.ini_options]
+markers = ["slow: end-to-end healing loop (takes several minutes)"]
+addopts = "-q -m 'not slow' -p no:cacheprovider"
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+
+[tool.ruff]
+line-length = 140
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

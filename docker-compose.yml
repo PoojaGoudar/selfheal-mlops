@@ -1,0 +1,63 @@
+# docker compose up --build   -> API, simulator, monitor, dashboard and MLflow UI (shared volume for state)
+x-app: &app
+  build: .
+  image: selfheal-mlops:latest
+  volumes:
+    - data:/data
+  environment:
+    SELFHEAL_DATA_DIR: /data
+    API_URL: http://api:8000
+    ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-sonnet-5-5}
+    LLM_PRICE_IN: ${LLM_PRICE_IN:-3.0}
+    LLM_PRICE_OUT: ${LLM_PRICE_OUT:-15.0}
+    SIM_SECONDS_PER_HOUR: ${SIM_SECONDS_PER_HOUR:-0.5}
+    AUTO_APPROVE: ${AUTO_APPROVE:-false}
+
+services:
+  init:
+    <<: *app
+    command: ["python", "-m", "selfheal.bootstrap"]
+    restart: "no"
+
+  api:
+    <<: *app
+    command: ["uvicorn", "selfheal.serving.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports: ["8000:8000"]
+    depends_on:
+      init: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  simulator:
+    <<: *app
+    command: ["python", "-m", "selfheal.simulator"]
+    depends_on:
+      api: {condition: service_healthy}
+
+  monitor:
+    <<: *app
+    command: ["python", "-m", "selfheal.monitoring.monitor"]
+    depends_on:
+      api: {condition: service_healthy}
+
+  dashboard:
+    <<: *app
+    command: ["streamlit", "run", "selfheal/dashboard.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]
+    ports: ["8501:8501"]
+    depends_on:
+      api: {condition: service_healthy}
+
+  mlflow-ui:
+    <<: *app
+    command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:////data/mlflow.db",
+              "--default-artifact-root", "file:///data/mlartifacts", "--allowed-hosts", "*"]
+    ports: ["5000:5000"]
+    depends_on:
+      init: {condition: service_completed_successfully}
+
+volumes:
+  data:

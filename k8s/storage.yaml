@@ -1,0 +1,11 @@
+# One shared volume holds the SQLite databases and MLflow artifacts.
+# ReadWriteOnce works here because Minikube is a single node (all pods land on the same node).
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: selfheal-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 2Gi

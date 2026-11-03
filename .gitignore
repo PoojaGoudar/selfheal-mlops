@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+runtime/
+mlruns/
+mlflow.db
+.env
+data/raw/air.csv
+.pytest_cache/
+.ruff_cache/
+*.egg-info/

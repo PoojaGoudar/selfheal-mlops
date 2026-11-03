@@ -1,0 +1,7 @@
+.venv
+runtime
+.git
+__pycache__
+docs
+mlruns
+*.db

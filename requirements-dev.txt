@@ -1,0 +1,5 @@
+-r requirements.txt
+pytest==9.1.1
+ruff==0.17.0
+# Optional, for the DVC labs (not needed to run the platform):
+# dvc[s3]

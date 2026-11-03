@@ -1,0 +1,15 @@
+# Versions below are the ones this project was built and tested with (Python 3.12).
+mlflow==3.17.1
+lightgbm==4.7.0
+pandas==3.0.6
+numpy==2.5.4
+scikit-learn==1.9.1
+scipy==1.18.1
+fastapi==0.143.0
+uvicorn==0.54.0
+httpx==0.28.1
+requests==2.34.2
+pandera==0.34.1
+streamlit==1.65.0
+anthropic==1.13.0
+PyYAML==6.0.3
