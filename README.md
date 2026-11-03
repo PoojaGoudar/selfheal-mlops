@@ -14,7 +14,7 @@ A PM2.5 forecasting service that **detects when it is going wrong, explains why,
                   (DVC data, MLflow runs)            └── any failed check ──► ROLLBACK ──► audit trail + model card
 ```
 
-## Tools and where each concept is applied
+## Tools and application
 | Concept | Tool | Where |
 |---|---|---|
 | Version control | Git | Repository, CI on every push |
@@ -36,7 +36,7 @@ A PM2.5 forecasting service that **detects when it is going wrong, explains why,
 * **Humans stay in charge:** the LLM is advisory with read-only tools; promotion needs a click.
 * **No train/serve skew:** training and the API share one feature function, proven by a unit test.
 
-## Quick start (no Docker)
+## Quick start 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt && pip install -e .
